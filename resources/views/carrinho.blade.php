@@ -13,7 +13,7 @@
    
   
       @foreach ($produtos as $chave => $produto)
-        
+  
 
       <table class="table">
         <thead>
@@ -33,7 +33,7 @@
             <td>{{ $produto->valor }}</td>
             <td> <a href="/storage/img/{{ $produto->foto }}" target="_blank"> <img src="{{asset('/storage/img/'.$produto->foto)}}"> </a></td>
             <td>{{ $produto->descricao }}</td>
-            <td> <button type="button" class="btn btn-danger">Remover do Carrinho</button></td>
+            <td> <a href="{{ route('removerCarrinho',['idpedido' => $chave]) }}"> <button type="button" class="btn btn-danger">Remover do Carrinho</button> </a></td>
           </tr>
         
         </tbody>

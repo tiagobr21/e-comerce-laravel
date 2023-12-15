@@ -5,17 +5,29 @@
 
 
 @if (\Session::has('empty'))
-<div class="alert alert-danger">
+<div class=" alert alert-info">
+  <i class="fa fa-info-circle"></i>
       Carrinho Vazio
+</div>
+@endif
+
+@if (\Session::has('role'))
+<div class=" alert alert-danger">
+  <i class="fa fa-info-circle"></i>
+      Você não tem permissão para acessar essa página
 </div>
 @endif
 
 <div class="container ps-5">
   <div class="row">
 
+
+
   
 
     <h2>Destaques</h2>
+
+  
 
 @foreach ($produtos as $produto)
        
@@ -35,7 +47,8 @@
       </div>
 
    @endforeach
-
+    
+   @if (Auth::user()?->role == 'admin')
       <div class="col-2 m-5">
          <div class="card">
            <a href="{{ route('cadastrar_produto') }}"> <img style="cursor: pointer" src="{{ asset('img/plus.png') }}" class="card-img-top"></a> 
@@ -44,7 +57,7 @@
          <h6 class="card-title m-2 text-center"> Cadastra Produto </h6>
       </div>
       </div>
-
+    @endif
       <div class="d-flex">
         {!! $produtos->links() !!}
       </div>

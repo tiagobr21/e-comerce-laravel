@@ -1,7 +1,14 @@
 <?php 
-   
+
+
+ 
    $produtos_cart = session('cart');
-   $quantidade = count( $produtos_cart);
+   if($produtos_cart){
+    $quantidade = count( $produtos_cart);
+   }
+
+ 
+
 
 ?>
 
@@ -27,7 +34,7 @@
         <div class="collapse navbar-collapse">
             <div class="navbar-nav">
             
-                    <li><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                    <li><a class="nav-link" href="/">Home</a></li>
                     <li><a id="produtos"  class="nav-link" href="">Produtos <b><i class="fa fa-chevron-circle-down"></i></b></a>
                         <ul class="dropdown_produtos">
                                
@@ -35,7 +42,7 @@
                                     <div class="row align-items-center">
                                       <div class="col">
                                         <label>Casual</label>
-                                        <li> <a href="/produto/1">Blusas</a> </li>
+                                        <li> <a href="/produtos/1">Blusas</a> </li>
                                       </div>
             
                                     </div>
@@ -44,6 +51,9 @@
                        
                         </ul>
                     </li>
+                      
+                    @if (Auth::user()?->role == 'admin')
+                      
                     <li><a id="adm"  class="nav-link" >Funções Administrativas <b><i class="fa fa-chevron-circle-down"></i></b></a>
                         <ul class="dropdown_adm">
 
@@ -59,8 +69,7 @@
 
                                   <div class="col">
                          
-                                    <li><a class="nav-link" href="{{ route('usuarios') }}">Usuários</a></li>
-                                    <li><a class="nav-link" href="{{ route('usuarios') }}">Fornecedores</a></li>
+                                    <li><a class="nav-link" >Fornecedores</a></li>
                                    
                                   </div>
                                   
@@ -71,26 +80,56 @@
                         </ul>
                     
                     </li>
+                    @endif
                 
                    
                     <li><a  class="nav-link" href="">Contato</a></li>
-                 
+                   
           
             </div>
+
         </div>
+  
+        @guest
+          
+        <div class="navbar-nav">
+
+          <a  href="/login"  class="nav-link" > Entrar </a>
+         
+           <a  href="/register"  class="nav-link" >Cadastrar </a>
+        
+     
+        </div>
+        @endguest
+
+        @auth
+        
+        <div class="navbar-nav">
+          <form action="/logout" method="POST">
+            @csrf
+           <a  href="/logout"  class="nav-link" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> </a>
+          </form>
+     
+        </div>
+        @endauth
+        
 
         <div id="cart">
     
           <a href="{{  route('carrinho') }}" id="carrinho" class="btn btn-sm">
             <div id="container-count">
-              <p id="count"> {{ $quantidade }}</p>   
+             @if($produtos_cart) <p id="count"> {{ $quantidade }}</p> @endif
            </div>
             <i class="fa fa-shopping-cart fa-lg">
            
             </i>
           </a>
-          
+
         </div>  
+
+       
+         
+   
   
     </nav>
 

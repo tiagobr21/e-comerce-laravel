@@ -16,37 +16,65 @@ use App\Http\Controllers\ClienteController;
 */
 
 
-Route::get('/', [ProdutoController::class, 'index'])->name('home');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->
+group(function(){
+    Route::get('/', [ProdutoController::class, 'index'])->name('home');
 
-Route::prefix('produto')->group(function () {
-  
-    Route::get('/cadastrar', [ProdutoController::class, 'cadastrarProduto'])->name('cadastrar_produto');
-    Route::post('/cadastrar_do', [ProdutoController::class, 'cadastrarProduto_do'])->name('cadastrar_produto_do');
-    Route::get('/deletar/{id}', [ProdutoController::class, 'deletarProduto'])->name('deletar_produto');
-    Route::get('/{categoria}', [ProdutoController::class, 'produtosPorCategoria'])->name('produto_por_categoria');
+        Route::prefix('produtos')->group(function () {
+
+            Route::get('/{categoria}', [ProdutoController::class, 'produtosPorCategoria'])->name('produto_por_categoria');
+        });
 
 
+    Route::middleware(['admin'])->group(function(){
+      
+        Route::prefix('categoria')->group(function () {
+            Route::get('/', [ProdutoController::class, 'categoria'])->name('categoria');
+            Route::get('/cadastrar', [ProdutoController::class, 'cadastrarCategoria'])->name('cadastrarCategoria');
+            Route::post('/cadastrar_do', [ProdutoController::class, 'cadastrarCategoria_do'])->name('cadastrarCategoria_do');
+        });
+        
+        Route::prefix('cliente')->group(function () {
+            Route::get('/', [ClienteController::class, 'index'])->name('clientes');
+        });
+
+        Route::prefix('produto')->group(function () {
+        
+            Route::get('/{categoria}', [ProdutoController::class, 'produtosPorCategoria']);
+            Route::get('/cadastrar', [ProdutoController::class, 'cadastrarProduto'])->name('cadastrar_produto');
+            Route::post('/cadastrar_do', [ProdutoController::class, 'cadastrarProduto_do'])->name('cadastrar_produto_do');
+            Route::get('/deletar/{id}', [ProdutoController::class, 'deletarProduto'])->name('deletar_produto');
+
+    
+    
+         });
+
+       
+    
+    });
+    
+   
+    
+    Route::prefix('carrinho')->group(function () {
+    
+        Route::get('/', [ProdutoController::class, 'carrinho'])->name('carrinho');
+        Route::get('/adicionar/{idproduto}', [ProdutoController::class, 'adicionarCarrinho'])->name('adicionarCarrinho');
+        Route::get('/remover/{idpedido}', [ProdutoController::class, 'removerCarrinho'])->name('removerCarrinho');
+    });
+    
 });
 
-Route::prefix('categoria')->group(function () {
-    Route::get('/', [ProdutoController::class, 'categoria'])->name('categoria');
-    Route::get('/cadastrar', [ProdutoController::class, 'cadastrarCategoria'])->name('cadastrarCategoria');
-    Route::post('/cadastrar_do', [ProdutoController::class, 'cadastrarCategoria_do'])->name('cadastrarCategoria_do');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/home', function () {
+        return view('home');
+    })->name('home');
 });
 
-
-
-Route::prefix('cliente')->group(function () {
-    Route::get('/', [ClienteController::class, 'index'])->name('clientes');
-});
-
-
-Route::prefix('usuarios')->group(function () {
-    Route::get('/', [ClienteController::class, 'index'])->name('usuarios');
-});
-
-Route::prefix('carrinho')->group(function () {
-
-    Route::get('/', [ProdutoController::class, 'carrinho'])->name('carrinho');
-    Route::get('/adicionar/{idproduto}', [ProdutoController::class, 'adicionarCarrinho'])->name('adicionarCarrinho');
-});

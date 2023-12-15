@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Produto;
 use \App\Models\Categoria;
+use Auth;
 
 class ProdutoController extends Controller
 {
@@ -13,10 +14,14 @@ class ProdutoController extends Controller
 
 
    public function index(Request $request){
+  
+ 
       $produtos = Produto::latest()
   
       ->paginate(5);
-      
+
+
+
       return view('home',compact('produtos'));
     }
 
@@ -108,7 +113,7 @@ class ProdutoController extends Controller
       return view("carrinho",compact('produtos'));
 
       }else{
-        return redirect()->back()->with('empty', 'Carrinho vazio'); 
+        return redirect('/')->with('empty', 'Carrinho vazio'); 
       }
     }
 
@@ -123,4 +128,17 @@ class ProdutoController extends Controller
 
       return redirect('/');
  }
+
+    
+    public function removerCarrinho(Request $request, $id){
+
+      $carrinho =  session('cart');
+    
+      unset($carrinho[$id]);
+      
+    
+      session(['cart'=> $carrinho]);
+
+      return redirect('/carrinho');
+    }
 }

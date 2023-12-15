@@ -18,7 +18,8 @@
          </div>
          <div class="card-body">
             <h6 class="card-title m-2">{{  $produto->nome }}</h6>
-            <a href="#" class="btn btn-sm btn-secondary">Adicionar no Carrinho</a>
+            <h3 class="preco">R$ {{ $produto->valor}}</h3>
+            <a href="{{ route('adicionarCarrinho',['idproduto' => $produto->id]) }}" class="btn btn-sm btn-secondary">Adicionar no Carrinho</a>
          </div>
          <div class="card-body">
            <a href="produto/deletar/{{ $produto->id }}"><i id="deletar"  class="fa fa-trash"></i></a> 
@@ -26,7 +27,7 @@
       </div>
 
    @endforeach
-
+     @if (Auth::user()?->role == 'admin')
       <div class="col-2 m-4">
          <div class="card">
            <a href="{{ route('cadastrar_produto') }}"> <img style="cursor: pointer" src="{{ asset('img/plus.png') }}" class="card-img-top"></a> 
@@ -35,7 +36,7 @@
          <h6 class="card-title m-2 text-center"> Cadastra Produto </h6>
       </div>
       </div>
-
+    @endif
       <div class="d-flex">
         {!! $produtos->links() !!}
       </div>
@@ -62,6 +63,12 @@
     width: 250px;
     cursor: pointer;
   }
+
+  .preco{
+    position: relative;
+    left: 12%;
+  }
+
 
   #deletar{
     cursor: pointer;
