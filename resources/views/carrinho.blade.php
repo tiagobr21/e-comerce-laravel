@@ -12,7 +12,7 @@
 
    
   
-      @foreach ($produtos as $chave => $produto)
+ 
   
 
       <table class="table">
@@ -27,6 +27,10 @@
           </tr>
         </thead>
         <tbody>
+          @php  $total = 0;     @endphp
+        
+        @foreach ($produtos as $chave => $produto)
+   
           <tr>
             <th scope="row">{{ $chave + 1  }}</th>
             <td>{{ $produto->nome }}</td>
@@ -35,14 +39,25 @@
             <td>{{ $produto->descricao }}</td>
             <td> <a href="{{ route('removerCarrinho',['idpedido' => $chave]) }}"> <button type="button" class="btn btn-danger">Remover do Carrinho</button> </a></td>
           </tr>
+          @php  $total += $produto->valor; @endphp
         
+        @endforeach
+
         </tbody>
+       
+       
+        <tr>
+          <td colspan="5">
+             Total do carrinho: R$  {{ $total }}
+          </td>
+        </tr>
+
       </table>
 
-      
-       @endforeach
-
-  
+       <form method="post" action="{{ route('carrinho_finalizar') }}">  
+          @csrf
+          <button type="submit" id="comprar" class="btn btn-success">Finalizar Compra</button>
+       </form>
     </div>
   
   </div>
@@ -61,6 +76,11 @@
   
     .d-flex{
       float: right;
+    }
+
+    #comprar{
+      position: relative;
+      top: 20px;
     }
   
   

@@ -58,6 +58,7 @@
       </div>
       </div>
     @endif
+    
       <div class="d-flex">
         {!! $produtos->links() !!}
       </div>
@@ -92,6 +93,8 @@
     width: 250px;
     cursor: pointer;
   }
+
+  
 
   .preco{
     position: relative;

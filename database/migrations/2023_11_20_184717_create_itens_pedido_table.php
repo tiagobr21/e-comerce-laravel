@@ -26,8 +26,7 @@ return new class extends Migration
 
             $table->foreign("pedido_id")
             ->references("id")
-            ->on("produtos")
-            ->onDelete("cascade");
+            ->on("pedidos");
         });
     }
 

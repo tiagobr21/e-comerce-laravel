@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use \App\Models\Produto;
 use \App\Models\Categoria;
 use Auth;
+use App\Services\VendaService;
 
 class ProdutoController extends Controller
 {
@@ -14,8 +15,7 @@ class ProdutoController extends Controller
 
 
    public function index(Request $request){
-  
- 
+
       $produtos = Produto::latest()
   
       ->paginate(5);
@@ -127,8 +127,29 @@ class ProdutoController extends Controller
       session(['cart'=> $carrinho]);
 
       return redirect('/');
- }
+   }
 
+   public function finalizarCarrinho(Request $request){
+      $prods = session('cart',[]);
+      $vendaService = new VendaService();
+      $result = $vendaService->finalizarVenda($prods, \Auth::user());
+      
+
+
+      if($result["status"] == "OK"){
+        $request->session()->forget("cart");
+      }
+
+      $request->session()->flash($result["status"],$result["message"]);
+      
+
+      return redirect('/');
+  }
+  
+  public function historicoComprars(Request $request){
+      
+    return redirect('/');
+  }
     
     public function removerCarrinho(Request $request, $id){
 

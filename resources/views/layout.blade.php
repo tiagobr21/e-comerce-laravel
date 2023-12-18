@@ -1,14 +1,9 @@
 <?php 
 
-
- 
    $produtos_cart = session('cart');
    if($produtos_cart){
     $quantidade = count( $produtos_cart);
    }
-
- 
-
 
 ?>
 
@@ -30,7 +25,8 @@
 
 
    <nav class="navbar navbar-light navbar-expand-md bg-light l-10 r-5 p-4">
-        <a href="#" class="navbar-brand">MyShop</a>
+        <a href="/" class="navbar-brand"> <img id="logo" src="{{asset('/storage/img/logo.jpg')}}" class="card-img-top"></a>
+
         <div class="collapse navbar-collapse">
             <div class="navbar-nav">
             
@@ -111,6 +107,28 @@
           </form>
      
         </div>
+        
+        <div id="session-user">
+            <a id="user"  class="nav-link" ><i class="fa fa-user fa-lg"></i></a>
+              <ul class="dropdown_user">
+
+                  <div id="subitem" class="container text-center">
+                      <div class="row align-items-center">
+                        <div class="col">
+              
+                          <li><a  class="nav-link" href="{{ route('info') }}">Perfil</a></li>
+                        
+                        </div>
+                      
+                      </div>
+                    </div>
+      
+              </ul>
+        </div>
+    
+      
+
+
         @endauth
         
 
@@ -120,7 +138,7 @@
             <div id="container-count">
              @if($produtos_cart) <p id="count"> {{ $quantidade }}</p> @endif
            </div>
-            <i class="fa fa-shopping-cart fa-lg">
+            <i id="carrinho" class="fa fa-shopping-cart fa-lg">
            
             </i>
           </a>
@@ -162,6 +180,14 @@
             
             $('.dropdown_produtos').css("display","none");
           }); 
+
+          $("#user").click(function(e){
+
+            e.preventDefault();
+            $('.dropdown_user').slideToggle('slow');
+
+  
+          }); 
           
 
 
@@ -169,6 +195,11 @@
     </script>
 
     <style>
+
+      #logo{
+        width: 60px;
+        border-radius: 50%;
+      }
         a{
             margin: 10px;
             text-decoration:none;
@@ -188,13 +219,25 @@
 
          .dropdown_adm{
             list-style-type:none;
-            padding: 10px;
+            padding: 5px;
             margin-left: 15px;
             position: absolute;
             border-radius: 10px;
             background: #445964;
             display: none;
          }
+
+         .dropdown_user{
+            list-style-type:none;
+            padding: 10px;
+            margin-left: -50px;
+            position: absolute;
+            border-radius: 10px;
+            background: #445964;
+            display: none;
+         }
+
+        
 
 
          .navbar-nav ul li{
@@ -217,17 +260,19 @@
          }
 
 
+
          #container-count{
            border-radius:20px; 
            max-width:70%;
            position: relative;
            left: 15px;
-           top: 22px;
-           background: grey
+           background: grey;
          }
 
          #count{
-            font-size: 15px;
+          position: absolute;
+          top:-10px;
+          font-size: 12px;
          }
 
      

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments("id");
             $table->datetime("datapedido");
             $table->string("status",4);
-            $table->unsignedBigInteger("usuario_id")->unsigned();
+            $table->integer("usuario_id")->unsigned();
             $table->timestamps();
 
             $table->foreign("usuario_id")

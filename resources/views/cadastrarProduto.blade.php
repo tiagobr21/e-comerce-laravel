@@ -31,7 +31,7 @@
         
       
       <select name="categoria_id" id="inputState" class="form-select">
-        <option selected>Choose...</option>
+        <option selected>Escolha</option>
 
         @foreach ($categorias as $categoria)
         <option value="{{ $categoria->id}}">{{ $categoria->nome }}</option>
