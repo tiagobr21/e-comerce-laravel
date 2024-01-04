@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('itens_pedidos', function (Blueprint $table) {
             $table->increments("id");
             $table->decimal("valor",10,2);
+            $table->integer("quantidade");
             $table->datetime("dt_item");
             $table->integer("produto_id")->unsigned();
             $table->integer("pedido_id")->unsigned();

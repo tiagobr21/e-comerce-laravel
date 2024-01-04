@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Produto;
 use \App\Models\Categoria;
+use \App\Models\Pedidos;
 use Auth;
 use App\Services\VendaService;
+use \App\Models\ItensPedidos;
 
 class ProdutoController extends Controller
 {
@@ -24,7 +26,8 @@ class ProdutoController extends Controller
 
       return view('home',compact('produtos'));
     }
-
+   
+    // PRODUTO
    public function cadastrarProduto(Request $request){
      $categorias = Categoria::all();
  
@@ -64,6 +67,10 @@ class ProdutoController extends Controller
 
      return redirect('/');
   }
+
+
+
+  // CATEGORIA
 
    public function categoria(Request $request){
 
@@ -105,6 +112,8 @@ class ProdutoController extends Controller
         return view("produtos_por_categoria",compact('produtos','categoria'));
    }
 
+  // CARRINHO
+
    public function carrinho(Request $request){
      $produtos = session('cart');
      
@@ -119,18 +128,40 @@ class ProdutoController extends Controller
 
     public function adicionarCarrinho(Request $request, $id){
       $produto = Produto::find($id);
-
+      
+  
       $carrinho = session('cart',[]);
       
       array_push($carrinho,$produto);
+
 
       session(['cart'=> $carrinho]);
 
       return redirect('/');
    }
 
+   public function adicionarQuantidade(Request $request, $id){
+    $carrinho = session('cart',[]);
+    
+    foreach ($carrinho as $key => $value) {
+       if($value->id == $id){
+
+        if($value->quantidade == null){
+          $value->quantidade = 1;
+        }
+         
+         $value->quantidade += 1 ;
+       }
+    }
+
+    session(['cart'=> $carrinho]);
+    
+    return redirect('/carrinho');
+   }
+
    public function finalizarCarrinho(Request $request){
       $prods = session('cart',[]);
+    
       $vendaService = new VendaService();
       $result = $vendaService->finalizarVenda($prods, \Auth::user());
       
@@ -143,23 +174,54 @@ class ProdutoController extends Controller
       $request->session()->flash($result["status"],$result["message"]);
       
 
-      return redirect('/');
+      return redirect('/compras/pagar');
   }
+
+  public function removerCarrinho(Request $request, $id){
+
+    $carrinho =  session('cart');
   
-  public function historicoComprars(Request $request){
-      
-    return redirect('/');
+    unset($carrinho[$id]);
+    
+  
+    session(['cart'=> $carrinho]);
+
+    return redirect('/carrinho');
   }
-    
-    public function removerCarrinho(Request $request, $id){
 
-      $carrinho =  session('cart');
-    
-      unset($carrinho[$id]);
+
+
+  //COMPRAS
+  
+  public function historicoCompras(Request $request){
       
-    
-      session(['cart'=> $carrinho]);
+  
 
-      return redirect('/carrinho');
+    $idusuario = Auth::user()->id;
+
+    $listaPedido = Pedidos::where("usuario_id",$idusuario)
+                            ->orderBy("datapedido","desc")
+                            ->get();
+    
+
+    return view('historico',compact('listaPedido'));
+      
+  }
+
+   public function detalheCompras(Request $request) {
+      $idpedido = $request->input("idpedido");
+      $listaItens = ItensPedidos::join("produtos","produtos.id","=","itens_pedidos.produto_id")
+                    ->where("pedido_id", $idpedido)
+                    ->get(['itens_pedidos.*','itens_pedidos.valor as valoritem','produtos.*']);
+
+      return view("detalhes", compact('listaItens'));
+   }
+    
+
+
+
+    public function pagarCompras(Request $request){
+
+        return view("pagar");
     }
 }

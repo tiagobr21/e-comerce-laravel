@@ -9,21 +9,32 @@
     @csrf
     <div class="col-md-6">
       <label for="inputEmail4" class="form-label"><b>Nome</b></label>
-      <input type="text" name="name" class="form-control" >
+      <input type="text" name="name" class="form-control" required>
     </div>
     <div class="col-md-6">
       <label for="inputPassword4" class="form-label"><b>Email</b></label>
-      <input type="email" name="email" class="form-control" >
+      <input id="email" type="email" name="email" class="form-control" required>
+      <div id="alertexistemail">
+     
+      </div>
     </div>
+
+   
+
 
     <div class="col-md-6">
       <label for="inputEmail4" class="form-label"><b>Telefone</b></label>
-      <input type="text" name="phone" class="form-control">
+      <input id="phone" type="text" name="phone" class="form-control" required> 
+      <div id="alertexistphone">
+      
+      </div>
     </div>
+   
+
 
     <div class="col-md-6">
       <label for="inputEmail4" class="form-label"><b>Password</b></label>
-      <input type="password" name="password" class="form-control">
+      <input type="password" name="password" class="form-control" required>
     </div>
  
 
@@ -32,8 +43,7 @@
       
         
       
-      <select name="role" id="inputState" class="form-select">
-        <option selected>Choose...</option>
+      <select name="role" id="inputState" class="form-select" required>
 
         <option value="user"> user </option>
         <option value="admin"> admin </option>
@@ -48,16 +58,83 @@
     </div>
   </form>
 
+
+  <script>
+
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+     
+      $(document).ready(function() {
+         
+
+        let phone = $("#phone");
+        let email = $("#email");
+        
+        email.focusout( function(){
+          let email_user =  email.val();
+        
+
+          $.post('{{ route("ifemailexist") }}', {ifexist : email_user}, (result) =>{
+ 
+              if(result == 'Email já existe'){
+                $('#alertexistemail').html(result); 
+                $('#alertexistemail').removeClass();
+                $('#alertexistemail').addClass('alert alert-danger');
+              }else{
+                $('#alertexistemail').html(result); 
+                $('#alertexistemail').removeClass();
+                $('#alertexistemail').addClass('alert alert-success');
+              }
+           
+          });
+
+          
+        });
+        
+        phone.focusout( function(){
+          let number =  phone.val();
+        
+
+          $.post('{{ route("ifphoneexist") }}', {ifexist : number}, (result) =>{
+ 
+              if(result == 'Telefone já existe'){
+                $('#alertexistphone').html(result); 
+                $('#alertexistphone').removeClass();
+                $('#alertexistphone').addClass('alert alert-danger');
+              }else{
+                $('#alertexistphone').html(result); 
+                $('#alertexistphone').removeClass();
+                $('#alertexistphone').addClass('alert alert-success');
+              }
+           
+          });
+
+          
+        });
+
+    });
+
+
+  </script>
+
     
   <style>
 
     #container{
        width: 50%;
-       height: 70%;
-       padding: 60px;
-       margin-top: 50px;
+       height: auto;
+       padding: 50px;
+       margin-top: 70px;
        background: rgb(246, 246, 246);
        border-radius: 40px;
+    }
+
+    .alert{
+       padding: 5px;
+       margin-bottom: -10px;
     }
     
    
@@ -69,6 +146,10 @@
       display: flex;
       justify-content: center;
     }
+
+
+
+    
   </style>
 
 

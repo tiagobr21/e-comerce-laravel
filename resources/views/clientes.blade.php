@@ -2,7 +2,7 @@
 @section('title','cadastrar')
 @section('content')
 
-<div id="table" class="m-5">
+<div id="table" class="m-3">
   <h2>Clientes</h2><br>
     @foreach ($users as $user)
       <table class="table table-striped">
@@ -33,23 +33,40 @@
               <tr>
             </tbody>
       </table>
+
     @endforeach
 
-    @if (Auth::user()?->role == 'admin')
-    <div class="col-2 m-1">
-       <div class="card">
-         <a href="{{ route('cadastrar_cliente') }}"> <img style="cursor: pointer" src="{{ asset('img/plus.png') }}" class="card-img-top"></a> 
-       </div>
-    <div class="card-body">
-       <h6 class="card-title m-2 text-center"> Cadastrar Cliente</h6>
-    </div>
-    </div>
-  @endif
+
+      <div class="flex">
+        <div id="paginate">{{ $users->links() }}</div>
+        <div class="float"></div>
+        <div class="addnewuser">
+          @if (Auth::user()?->role == 'admin')
+          <div class="col-2 m-1">
+            <div class="card">
+              <a href="{{ route('cadastrar_cliente') }}"> <img style="cursor: pointer" src="{{ asset('img/plus.png') }}" class="card-img-top"></a> 
+            </div>
+          <div class="card-body">
+            <h6 class="card-title m-2 text-center"> Cadastrar Cliente</h6>
+          </div>
+          </div>
+          @endif
+        </div>
+      </div>
 </div>
 
 <style>
   #table{
    margin-top:200px; 
+  }
+
+  .flex{
+    display: flex;
+  }
+
+  .addnewuser{
+    position: relative;
+  
   }
 
   
@@ -77,9 +94,15 @@
     cursor: pointer;
   }
 
-  .card-title{
-    float: left;
+  .float{
+    margin-left: 45%;
   }
+  .addnewuser{
+    margin-left: 30%;
+  }
+
+  
+
   
 
 </style>

@@ -9,6 +9,6 @@ class ItensPedidos extends Model
 
     protected $table = 'itens_pedidos';
 
-    protected $fillable = ['valor','dt_item','produto_id','pedido_id'];
+    protected $fillable = ['quantidade','valor','dt_item','produto_id','pedido_id','quantidade'];
 
 }

@@ -13,7 +13,7 @@
     </div>
     <div class="col-md-6">
       <label for="inputPassword4" class="form-label"><b>Valor</b></label>
-      <input type="number" name="valor" class="form-control" placeholder="Ex:79.90" >
+      <input type="number" step="0.01" name="valor" class="form-control" placeholder="Ex:79.90" >
     </div>
 
     <div class="col-12">

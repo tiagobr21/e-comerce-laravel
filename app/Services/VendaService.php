@@ -9,6 +9,7 @@ use Log;
 
 class VendaService {
     public function finalizarVenda($prods = [], User $user){
+
        try{ 
 
 
@@ -24,8 +25,9 @@ class VendaService {
 
         foreach ($prods as $p) {
      
-       
+     
           $itens = ItensPedidos::create([
+            'quantidade' =>  $p->quantidade,
             'valor' =>  $p->valor,
             'dt_item' => $dtHoje->format("Y-m-d H:i:s"),
             'produto_id' => $p->id,

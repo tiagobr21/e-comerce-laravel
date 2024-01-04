@@ -38,7 +38,7 @@
                                     <div class="row align-items-center">
                                       <div class="col">
                                         <label>Casual</label>
-                                        <li> <a href="/produtos/1">Blusas</a> </li>
+                                        <li> <a href="/produto/1">Blusas</a> </li>
                                       </div>
             
                                     </div>
@@ -78,7 +78,7 @@
                     </li>
                     @endif
                 
-                   
+                    <li><a  class="nav-link" href="{{ route('historico_compras') }}">Minhas Compras</a></li>
                     <li><a  class="nav-link" href="">Contato</a></li>
                    
           
@@ -100,13 +100,7 @@
 
         @auth
         
-        <div class="navbar-nav">
-          <form action="/logout" method="POST">
-            @csrf
-           <a  href="/logout"  class="nav-link" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> </a>
-          </form>
-     
-        </div>
+   
         
         <div id="session-user">
             <a id="user"  class="nav-link" ><i class="fa fa-user fa-lg"></i></a>
@@ -117,11 +111,16 @@
                         <div class="col">
               
                           <li><a  class="nav-link" href="{{ route('info') }}">Perfil</a></li>
-                        
+                          <li> <form action="/logout" method="POST">
+                            @csrf
+                           <a  href="/logout"  class="nav-link" onclick="event.preventDefault(); this.closest('form').submit();"> Sair <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> </a>
+                          </form></li>
                         </div>
                       
                       </div>
                     </div>
+
+                 
       
               </ul>
         </div>
@@ -153,9 +152,11 @@
 
 
 
-
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
     <script>
         $.ajaxSetup({
             headers: {
@@ -163,7 +164,9 @@
             }
         });
 
+    
         $(document).ready(function() {
+
       
           $("#produtos").click(function(e){
 

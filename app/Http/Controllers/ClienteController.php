@@ -8,7 +8,9 @@ use App\Models\User;
 class ClienteController extends Controller
 {
     public function index(Request $request){
-         $users = User::where('role','user')->get();
+         $users = User::where('role','user')
+         ->paginate(2)
+         ->withQueryString();
            
         
         return view("clientes",compact('users'));
@@ -72,6 +74,36 @@ class ClienteController extends Controller
        return redirect()->back()->with('success', 'Usurário atualizado com Sucesso!');    
 
    }
+
+   public function ifPhoneExist(Request $request){
+      $ifexist = $request->input('ifexist');
+
+      $users = User::all();
+      
+      foreach ($users as $key => $user) {
+        if ($user->phone == $ifexist){
+            return 'Telefone já existe';
+        }else{
+            return 'Telefone disponível';
+        }
+      }
+   }
+
+   public function ifEmailExist(Request $request){
+    $ifexist = $request->input('ifexist');
+
+    $users = User::all();
+    
+    foreach ($users as $key => $user) {
+      if ($user->email == $ifexist){
+          return 'Email já existe';
+      }else{
+          return 'Email disponível';
+      }
+    }
+
+
+ }
 
     public function info(Request $request){
        $user_logado = auth()->user();
